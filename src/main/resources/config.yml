@@ -1,0 +1,22 @@
+Global_Messages:
+
+  Default_Format:
+    Enabled: true
+    Format: "&f<PLAYER> &7&l> &f<MESSAGE>"
+
+  Per_Group_Formats:
+    Enabled: true
+    Formats:
+      Admin: "&8&l(&4&lAdmin&8&l) &4<PLAYER> &7&l> &f<MESSAGE>"
+      Member: "&8&l(&f&lMember&8&l) &f<PLAYER> &7&l> &f<MESSAGE>"
+
+Private_Messages:
+
+  Enabled: true
+  Sender_Format: "&eYou &8-> &e<PLAYER> &7&l> &d<MESSAGE>"
+  Recipient_Format: "&e<PLAYER> &8-> &eYou &7&l> &d<MESSAGE>"
+
+Message_Spy:
+
+  Enabled: true
+  Spy_Format: "&8<PLAYER_ONE> -> <PLAYER_TWO> &7&l> &8d<MESSAGE>"

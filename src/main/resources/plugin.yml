@@ -1,0 +1,30 @@
+name: ChatFormatter
+version: '${project.version}'
+main: me.dashmyers.chatformatter.ChatFormatter
+api-version: 1.19
+authors: [ Dashersack ]
+description: A plugin that formats the chat.
+softdepend: [ Vault ]
+commands:
+  message:
+    description: Privately send a message to a player.
+    usage: </command> <player> <message>
+    aliases: [msg, whisper]
+  reply:
+    description: Reply to a private message.
+    usage: </command> <message>
+    aliases: [r]
+  messagespy:
+    description: Toggle the ability to see private other players' messages.
+    usage: </command>
+    aliases: [mspy, spy]
+permissions:
+  chatformatter.message:
+    description: Allows access to the message command.
+    default: true
+  chatformatter.reply:
+    description: Allows access to the reply command.
+    default: true
+  chatformatter.messagespy:
+    description: Allows access to the message spy command.
+    default: false
