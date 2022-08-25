@@ -15,7 +15,7 @@ public class MessageCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (sender instanceof Player senderPlayer) {
-            if (!senderPlayer.hasPermission("chatformatter.message")) {
+            if (!senderPlayer.hasPermission("bbchat.message")) {
                 AlertHelper.sendPermissionError(senderPlayer);
                 return true;
             }

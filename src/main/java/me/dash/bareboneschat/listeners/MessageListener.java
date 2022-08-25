@@ -1,22 +1,21 @@
 package me.dash.bareboneschat.listeners;
 
 import me.dash.bareboneschat.BareBonesChat;
+import me.dash.bareboneschat.config.GlobalMessagesSection;
 import me.dash.bareboneschat.helpers.MessageHelper;
-import org.bukkit.configuration.ConfigurationSection;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class MessageListener implements Listener {
-    private final ConfigurationSection groupFormatsSection;
-    private final ConfigurationSection defaultFormatSection;
-    private final BareBonesChat plugin;
+    private final GlobalMessagesSection globalMessagesConfigSection;
+    private final Permission permissionProvider;
 
     public MessageListener(BareBonesChat plugin) {
-        groupFormatsSection = plugin.getConfig().getConfigurationSection("Global_Messages.Per_Group_Formats.Formats");
-        defaultFormatSection = plugin.getConfig().getConfigurationSection("Global_Messages.Default_Format");
-        this.plugin = plugin;
+        globalMessagesConfigSection = plugin.getConfigManager().getGlobalMessagesSection();
+        permissionProvider = plugin.getPermissionProvider();
     }
 
 
@@ -27,20 +26,22 @@ public class MessageListener implements Listener {
         Player player = event.getPlayer();
         boolean hasGroupPermission = false;
 
-        for (String key : groupFormatsSection.getKeys(false)) {
-            if ((plugin.permissionProvider != null && plugin.permissionProvider.playerInGroup(player, key.toLowerCase())) ||
+        System.out.println(globalMessagesConfigSection);
+        System.out.println(permissionProvider);
+        for (String key : globalMessagesConfigSection.getGroupFormatKeys()) {
+            if ((permissionProvider != null && permissionProvider.playerInGroup(player, key.toLowerCase())) ||
                     player.hasPermission("group." + key.toLowerCase())) {
                 event.setFormat(MessageHelper.replaceMessagePlaceholders(
-                        groupFormatsSection.getString(key), player.getDisplayName(), event.getMessage()));
+                        globalMessagesConfigSection.getGroupFormat(key), player.getDisplayName(), event.getMessage()));
 
                 hasGroupPermission = true;
                 break;
             }
         }
-
-        if (!hasGroupPermission && defaultFormatSection.getBoolean("Enabled")) {
+        System.out.println("testa");
+        if (!hasGroupPermission && globalMessagesConfigSection.isDefaultFormatEnabled()) {
             event.setFormat(MessageHelper.replaceMessagePlaceholders(
-                    defaultFormatSection.getString("Format"), player.getDisplayName(), event.getMessage()));
+                    globalMessagesConfigSection.getDefaultFormat(), player.getDisplayName(), event.getMessage()));
         }
     }
 }

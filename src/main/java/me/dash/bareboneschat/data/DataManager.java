@@ -4,11 +4,25 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class DataManager {
-    public HashMap<UUID, Boolean> messageSpyPlayers;
-    public HashMap<UUID, UUID> recipientSenderMap;
+    private final HashMap<UUID, Boolean> messageSpyPlayers;
+    private final HashMap<UUID, UUID> recipientSenderMap;
 
     public DataManager() {
         messageSpyPlayers = new HashMap<>();
         recipientSenderMap = new HashMap<>();
+    }
+
+
+
+
+    public HashMap<UUID, Boolean> getMessageSpyPlayers() {
+        return messageSpyPlayers;
+    }
+
+
+
+
+    public HashMap<UUID, UUID> getRecipientSenderMap() {
+        return recipientSenderMap;
     }
 }

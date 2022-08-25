@@ -1,6 +1,7 @@
 package me.dash.bareboneschat.commands;
 
 import me.dash.bareboneschat.BareBonesChat;
+import me.dash.bareboneschat.data.DataManager;
 import me.dash.bareboneschat.events.PrivateMessageEvent;
 import me.dash.bareboneschat.helpers.AlertHelper;
 import me.dash.bareboneschat.helpers.MessageHelper;
@@ -13,10 +14,11 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class ReplyCommand implements CommandExecutor {
-    private final BareBonesChat plugin;
+
+    private final DataManager dataManager;
 
     public ReplyCommand(BareBonesChat plugin) {
-        this.plugin = plugin;
+        dataManager = plugin.getDataManager();
     }
 
 
@@ -26,12 +28,12 @@ public class ReplyCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (sender instanceof Player senderPlayer) {
-            if (!senderPlayer.hasPermission("chatformatter.reply")) {
+            if (!senderPlayer.hasPermission("bbchat.reply")) {
                 AlertHelper.sendPermissionError(senderPlayer);
                 return true;
             }
 
-            UUID recipientPlayerUUID = plugin.dataManager.recipientSenderMap.get(senderPlayer.getUniqueId());
+            UUID recipientPlayerUUID = dataManager.getRecipientSenderMap().get(senderPlayer.getUniqueId());
 
             if (recipientPlayerUUID == null) {
                 AlertHelper.sendError(senderPlayer, "You have not been messaged.");

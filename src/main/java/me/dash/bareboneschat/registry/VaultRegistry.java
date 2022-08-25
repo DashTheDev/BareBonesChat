@@ -28,7 +28,7 @@ public final class VaultRegistry {
             return permissionProvider;
         }
         catch (Exception e) {
-            plugin.logger.info("Vault not found, some permission based functionality may not work!");
+            plugin.getLogger().info("Vault not found, some permission based functionality may not work!");
             return null;
         }
     }

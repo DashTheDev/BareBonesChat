@@ -1,6 +1,7 @@
 package me.dash.bareboneschat.commands;
 
 import me.dash.bareboneschat.BareBonesChat;
+import me.dash.bareboneschat.data.DataManager;
 import me.dash.bareboneschat.helpers.AlertHelper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,10 +9,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class MessageSpyCommand implements CommandExecutor {
-    private final BareBonesChat plugin;
+
+    private final DataManager dataManager;
 
     public MessageSpyCommand(BareBonesChat plugin) {
-        this.plugin = plugin;
+        dataManager = plugin.getDataManager();
     }
 
 
@@ -20,21 +22,21 @@ public class MessageSpyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
-            if (!player.hasPermission("chatformatter.messagespy")) {
+            if (!player.hasPermission("bbchat.messagespy")) {
                 AlertHelper.sendPermissionError(player);
                 return true;
             }
 
-            Boolean isActive = plugin.dataManager.messageSpyPlayers.get(player.getUniqueId());
+            Boolean isActive = dataManager.getMessageSpyPlayers().get(player.getUniqueId());
 
             if (isActive == null) {
-                plugin.dataManager.messageSpyPlayers.put(player.getUniqueId(), true);
+                dataManager.getMessageSpyPlayers().put(player.getUniqueId(), true);
                 AlertHelper.sendSuccess(player, "Message Spy enabled.");
             }
             else {
-                plugin.dataManager.messageSpyPlayers.put(player.getUniqueId(), !isActive);
+                dataManager.getMessageSpyPlayers().put(player.getUniqueId(), !isActive);
 
-                if (!isActive == true) {
+                if (!isActive) {
                     AlertHelper.sendSuccess(player, "Message Spy enabled.");
                 }
                 else {

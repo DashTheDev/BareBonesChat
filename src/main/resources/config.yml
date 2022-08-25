@@ -19,4 +19,5 @@ Private_Messages:
 Message_Spy:
 
   Enabled: true
+  RememberToggle: false
   Spy_Format: "&8<PLAYER_ONE> -> <PLAYER_TWO> &7&l> &8d<MESSAGE>"

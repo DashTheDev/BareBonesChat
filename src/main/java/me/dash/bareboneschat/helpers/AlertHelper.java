@@ -9,7 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class AlertHelper {
-    private static final String PLUGIN_PREFIX = ChatColor.translateAlternateColorCodes('&', "&8&l[&b&lChatFormatter&8&l] ");
+    private static final String PLUGIN_PREFIX = ChatColor.translateAlternateColorCodes('&', "&8&l[&b&lBBChat&8&l] ");
 
     private AlertHelper() {
         throw new UnsupportedOperationException("Helper class cannot be instantiated.");

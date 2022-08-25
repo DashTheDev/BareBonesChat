@@ -1,28 +1,27 @@
 package me.dash.bareboneschat.listeners;
 
 import me.dash.bareboneschat.BareBonesChat;
+import me.dash.bareboneschat.config.MessageSpySection;
+import me.dash.bareboneschat.config.PrivateMessagesSection;
+import me.dash.bareboneschat.data.DataManager;
 import me.dash.bareboneschat.events.PrivateMessageEvent;
+import me.dash.bareboneschat.events.SpyMessageEvent;
 import me.dash.bareboneschat.helpers.MessageHelper;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Stream;
 
 public class PrivateMessageListener implements Listener {
-    private final ConfigurationSection privateMessagesSection;
-    private final ConfigurationSection messageSpySection;
-    private final BareBonesChat plugin;
+
+    private final PrivateMessagesSection privateMessagesConfigSection;
+    private final MessageSpySection messageSpyConfigSection;
+    private final DataManager dataManager;
 
     public PrivateMessageListener(BareBonesChat plugin) {
-        FileConfiguration config = plugin.getConfig();
-        this.privateMessagesSection = config.getConfigurationSection("Private_Messages");
-        this.messageSpySection = config.getConfigurationSection("Message_Spy");
-        this.plugin = plugin;
+        privateMessagesConfigSection = plugin.getConfigManager().getPrivateMessagesSection();
+        messageSpyConfigSection = plugin.getConfigManager().getMessageSpySection();
+        dataManager = plugin.getDataManager();
     }
 
 
@@ -34,23 +33,24 @@ public class PrivateMessageListener implements Listener {
         Player recipientPlayer = event.getRecipientPlayer();
         String message = event.getMessage();
 
-        String senderMessage = MessageHelper.replaceMessagePlaceholders(privateMessagesSection.getString("Sender_Format"), recipientPlayer.getDisplayName(), message);
-        String recipientMessage = MessageHelper.replaceMessagePlaceholders(privateMessagesSection.getString("Recipient_Format"), senderPlayer.getDisplayName(), message);
+        String senderMessage = MessageHelper.replaceMessagePlaceholders(
+                privateMessagesConfigSection.getSenderFormat(),
+                recipientPlayer.getDisplayName(),
+                message);
+
+        String recipientMessage = MessageHelper.replaceMessagePlaceholders(
+                privateMessagesConfigSection.getRecipientFormat(),
+                senderPlayer.getDisplayName(),
+                message);
 
         senderPlayer.sendMessage(senderMessage);
         recipientPlayer.sendMessage(recipientMessage);
 
-        plugin.dataManager.recipientSenderMap.put(recipientPlayer.getUniqueId(), senderPlayer.getUniqueId());
+        dataManager.getRecipientSenderMap().put(recipientPlayer.getUniqueId(), senderPlayer.getUniqueId());
 
-        String spyMessage = MessageHelper.replaceSpyMessagePlaceholders(messageSpySection.getString("Spy_Format"),
-                senderPlayer.getDisplayName(), recipientPlayer.getDisplayName(), message);
-
-        Stream<UUID> keys = plugin.dataManager.messageSpyPlayers.entrySet().stream()
-                .filter(val -> val.getValue() == true)
-                .map(Map.Entry::getKey);
-
-        keys.forEach((UUID playerUUID) -> {
-            Bukkit.getServer().getPlayer(playerUUID).sendMessage(spyMessage);
-        });
+        if (messageSpyConfigSection.isEnabled()) {
+            SpyMessageEvent spyMessageEvent = new SpyMessageEvent(senderPlayer.getDisplayName(), recipientPlayer.getDisplayName(), message);
+            Bukkit.getServer().getPluginManager().callEvent(spyMessageEvent);
+        }
     }
 }

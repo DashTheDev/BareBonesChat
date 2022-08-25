@@ -1,10 +1,7 @@
 package me.dash.bareboneschat.registry;
 
 import me.dash.bareboneschat.BareBonesChat;
-import me.dash.bareboneschat.listeners.JoinListener;
-import me.dash.bareboneschat.listeners.MessageListener;
-import me.dash.bareboneschat.listeners.PrivateMessageListener;
-import me.dash.bareboneschat.listeners.QuitListener;
+import me.dash.bareboneschat.listeners.*;
 import org.bukkit.plugin.PluginManager;
 
 public class ListenerRegistry {
@@ -21,5 +18,6 @@ public class ListenerRegistry {
         pluginManager.registerEvents(new QuitListener(plugin), plugin);
         pluginManager.registerEvents(new JoinListener(plugin), plugin);
         pluginManager.registerEvents(new PrivateMessageListener(plugin), plugin);
+        pluginManager.registerEvents(new SpyMessageListener(plugin), plugin);
     }
 }

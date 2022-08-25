@@ -1,6 +1,6 @@
-name: ChatFormatter
+name: BareBonesChat
 version: '${project.version}'
-main: me.dashmyers.chatformatter.ChatFormatter
+main: me.dash.bareboneschat.BareBonesChat
 api-version: 1.19
 authors: [ Dashersack ]
 description: A plugin that formats the chat.
@@ -19,12 +19,12 @@ commands:
     usage: </command>
     aliases: [mspy, spy]
 permissions:
-  chatformatter.message:
+  bbchat.message:
     description: Allows access to the message command.
     default: true
-  chatformatter.reply:
+  bbchat.reply:
     description: Allows access to the reply command.
     default: true
-  chatformatter.messagespy:
+  bbchat.messagespy:
     description: Allows access to the message spy command.
     default: false
