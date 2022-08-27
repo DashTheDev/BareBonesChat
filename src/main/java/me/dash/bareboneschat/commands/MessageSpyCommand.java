@@ -1,29 +1,38 @@
 package me.dash.bareboneschat.commands;
 
 import me.dash.bareboneschat.BareBonesChat;
+import me.dash.bareboneschat.PluginMessenger;
 import me.dash.bareboneschat.data.DataManager;
-import me.dash.bareboneschat.helpers.AlertHelper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class MessageSpyCommand implements CommandExecutor {
+public class MessageSpyCommand implements BareBonesChatCommand, CommandExecutor {
 
     private final DataManager dataManager;
+    private final PluginMessenger pluginMessenger;
 
     public MessageSpyCommand(BareBonesChat plugin) {
         dataManager = plugin.getDataManager();
+        pluginMessenger = plugin.getMessenger();
     }
 
+    @Override
+    public String getDisplayName() {
+        return "Message Spy";
+    }
 
-
+    @Override
+    public String getDescription() {
+        return "Toggle the ability to see private other players' messages.";
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
-            if (!player.hasPermission("bbchat.messagespy")) {
-                AlertHelper.sendPermissionError(player);
+            if (!hasPermission(player)) {
+                pluginMessenger.sendPermissionError(player);
                 return true;
             }
 
@@ -31,16 +40,16 @@ public class MessageSpyCommand implements CommandExecutor {
 
             if (isActive == null) {
                 dataManager.getMessageSpyPlayers().put(player.getUniqueId(), true);
-                AlertHelper.sendSuccess(player, "Message Spy enabled.");
+                pluginMessenger.sendSuccess(player, "Message Spy enabled.");
             }
             else {
                 dataManager.getMessageSpyPlayers().put(player.getUniqueId(), !isActive);
 
                 if (!isActive) {
-                    AlertHelper.sendSuccess(player, "Message Spy enabled.");
+                    pluginMessenger.sendSuccess(player, "Message Spy enabled.");
                 }
                 else {
-                    AlertHelper.sendError(player, "Message Spy disabled.");
+                    pluginMessenger.sendError(player, "Message Spy disabled.");
                 }
             }
         }

@@ -3,7 +3,7 @@ version: '${project.version}'
 main: me.dash.bareboneschat.BareBonesChat
 api-version: 1.19
 authors: [ Dashersack ]
-description: A plugin that formats the chat.
+description: A lightweight chat plugin.
 softdepend: [ Vault ]
 commands:
   message:
@@ -18,6 +18,10 @@ commands:
     description: Toggle the ability to see private other players' messages.
     usage: </command>
     aliases: [mspy, spy]
+  bbchat:
+    description: BareBonesChat commands.
+    usage: /<command> [help]
+    aliases: [ bareboneschat, bbc ]
 permissions:
   bbchat.message:
     description: Allows access to the message command.
@@ -28,3 +32,6 @@ permissions:
   bbchat.messagespy:
     description: Allows access to the message spy command.
     default: false
+  bbchat.help:
+    description: Allows access to the help subcommand.
+    default: true

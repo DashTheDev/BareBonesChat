@@ -1,9 +1,10 @@
 package me.dash.bareboneschat.registry;
 
 import me.dash.bareboneschat.BareBonesChat;
-import me.dash.bareboneschat.commands.MessageCommand;
-import me.dash.bareboneschat.commands.MessageSpyCommand;
-import me.dash.bareboneschat.commands.ReplyCommand;
+import me.dash.bareboneschat.commands.*;
+import org.bukkit.command.CommandExecutor;
+
+import java.util.HashMap;
 
 public final class CommandRegistry {
     private CommandRegistry() {
@@ -14,8 +15,14 @@ public final class CommandRegistry {
 
 
     public static void registerCommands(BareBonesChat plugin) {
-        plugin.getCommand("message").setExecutor(new MessageCommand());
-        plugin.getCommand("reply").setExecutor(new ReplyCommand(plugin));
-        plugin.getCommand("messagespy").setExecutor(new MessageSpyCommand(plugin));
+        HashMap<String, BareBonesChatCommand> commands = new HashMap<>();
+        commands.put("message", new MessageCommand(plugin));
+        commands.put("reply", new ReplyCommand(plugin));
+        commands.put("messagespy", new MessageSpyCommand(plugin));
+        commands.put("bbchat", new BBChatCommand(plugin, commands));
+
+        for (BareBonesChatCommand command : commands.values()) {
+            plugin.getCommand(command.getName()).setExecutor((CommandExecutor)command);
+        }
     }
 }

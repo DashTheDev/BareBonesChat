@@ -1,7 +1,8 @@
 package me.dash.bareboneschat.commands;
 
+import me.dash.bareboneschat.BareBonesChat;
+import me.dash.bareboneschat.PluginMessenger;
 import me.dash.bareboneschat.events.PrivateMessageEvent;
-import me.dash.bareboneschat.helpers.AlertHelper;
 import me.dash.bareboneschat.helpers.MessageHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -9,31 +10,51 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class MessageCommand implements CommandExecutor {
+public class MessageCommand implements BareBonesChatCommand, CommandExecutor {
+
+    private final PluginMessenger pluginMessenger;
+
+    public MessageCommand(BareBonesChat plugin) {
+        pluginMessenger = plugin.getMessenger();
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Message";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Privately send a message to a player.";
+    }
+
+    @Override
+    public String getUsage() {
+        return BareBonesChatCommand.super.getUsage() + " <player> <message>";
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
         if (sender instanceof Player senderPlayer) {
-            if (!senderPlayer.hasPermission("bbchat.message")) {
-                AlertHelper.sendPermissionError(senderPlayer);
+            if (!hasPermission(senderPlayer)) {
+                pluginMessenger.sendPermissionError(senderPlayer);
                 return true;
             }
 
             if (args.length == 0) {
-                AlertHelper.sendError(senderPlayer, "Please specify a username and a message.");
+                pluginMessenger.sendError(senderPlayer, "Please specify a username and a message.");
                 return true;
             }
 
             if (args.length == 1) {
-                AlertHelper.sendError(senderPlayer, "Please specify a message.");
+                pluginMessenger.sendError(senderPlayer, "Please specify a message.");
                 return true;
             }
 
             Player recipientPlayer = Bukkit.getServer().getPlayerExact(args[0]);
 
             if (recipientPlayer == null) {
-                AlertHelper.sendError(senderPlayer, "Player could not be found.");
+                pluginMessenger.sendError(senderPlayer, "Player could not be found.");
                 return true;
             }
 

@@ -26,8 +26,6 @@ public class MessageListener implements Listener {
         Player player = event.getPlayer();
         boolean hasGroupPermission = false;
 
-        System.out.println(globalMessagesConfigSection);
-        System.out.println(permissionProvider);
         for (String key : globalMessagesConfigSection.getGroupFormatKeys()) {
             if ((permissionProvider != null && permissionProvider.playerInGroup(player, key.toLowerCase())) ||
                     player.hasPermission("group." + key.toLowerCase())) {
@@ -38,7 +36,7 @@ public class MessageListener implements Listener {
                 break;
             }
         }
-        System.out.println("testa");
+
         if (!hasGroupPermission && globalMessagesConfigSection.isDefaultFormatEnabled()) {
             event.setFormat(MessageHelper.replaceMessagePlaceholders(
                     globalMessagesConfigSection.getDefaultFormat(), player.getDisplayName(), event.getMessage()));

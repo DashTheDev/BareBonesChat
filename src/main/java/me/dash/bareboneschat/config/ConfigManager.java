@@ -14,22 +14,13 @@ public class ConfigManager {
         messageSpySection = new MessageSpySection(plugin);
     }
 
-
-
-
     public GlobalMessagesSection getGlobalMessagesSection() {
         return globalMessagesSection;
     }
 
-
-
-
     public PrivateMessagesSection getPrivateMessagesSection() {
         return privateMessagesSection;
     }
-
-
-
 
     public MessageSpySection getMessageSpySection() {
         return messageSpySection;

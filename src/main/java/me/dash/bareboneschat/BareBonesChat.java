@@ -10,15 +10,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BareBonesChat extends JavaPlugin {
 
-    //region Private Variables
-
+    private PluginMessenger messenger;
     private ConfigManager configManager;
     private DataManager dataManager;
     private Permission permissionProvider;
 
-    //endregion
-
-    //region Variable Getters
+    public PluginMessenger getMessenger() {
+        return messenger;
+    }
 
     public ConfigManager getConfigManager() {
         return configManager;
@@ -32,12 +31,11 @@ public final class BareBonesChat extends JavaPlugin {
         return permissionProvider;
     }
 
-    //endregion
-
     @Override
     public void onEnable() {
         saveDefaultConfig();
 
+        messenger = new PluginMessenger(this);
         configManager = new ConfigManager(this);
         dataManager = new DataManager();
 

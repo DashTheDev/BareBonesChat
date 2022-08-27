@@ -2,7 +2,7 @@ package me.dash.bareboneschat.helpers;
 
 import org.bukkit.ChatColor;
 
-public class MessageHelper {
+public final class MessageHelper {
     private MessageHelper() {
         throw new UnsupportedOperationException("Helper class cannot be instantiated.");
     }
