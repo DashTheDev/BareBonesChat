@@ -31,38 +31,32 @@ public class HelpSubCommand implements BareBonesChatSubCommand {
 
     @Override
     public String getDescription() {
-        return "Not done yet.";
-    }
-
-    @Override
-    public String getUsage() {
-        return BareBonesChatSubCommand.super.getUsage() + " [command]";
-    }
-
-    @Override
-    public boolean hasPermission(Player player) {
-        return player.hasPermission("bbchat." + getName());
+        return "Provides a list of usable commands with hover information.";
     }
 
     @Override
     public boolean executeCommand(CommandSender sender, String[] args) {
         Player player = (Player)sender;
-        player.spigot().sendMessage(generateHelp());
+        player.spigot().sendMessage(generateHelp(player));
         return true;
     }
 
-    private TextComponent generateHelp() {
+    private TextComponent generateHelp(Player player) {
         TextComponent mainComponent = new TextComponent();
-        TextComponent preHelpComponent = new TextComponent("Available commands.");
+        TextComponent preHelpComponent = new TextComponent(ChatColor.GREEN + "Commands available to you.");
         mainComponent.addExtra(pluginMessenger.getPluginPrefixComponent());
         mainComponent.addExtra(preHelpComponent);
 
         for (BareBonesChatCommand command: commands.values()) {
-            addCommandHelp(mainComponent, command.getDisplayName(), command.getDescription(), command.getUsage());
+            if (command.hasPermission(player)) {
+                addCommandHelp(mainComponent, command.getDisplayName(), command.getDescription(), command.getUsage());
+            }
         }
 
         for (BareBonesChatSubCommand subCommand: subCommands.values()) {
-            addCommandHelp(mainComponent, subCommand.getDisplayName(), subCommand.getDescription(), subCommand.getUsage());
+            if (subCommand.hasPermission(player)) {
+                addCommandHelp(mainComponent, subCommand.getDisplayName(), subCommand.getDescription(), subCommand.getUsage());
+            }
         }
 
         return mainComponent;

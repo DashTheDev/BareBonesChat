@@ -11,17 +11,23 @@ import org.bukkit.entity.Player;
 public class PluginMessenger {
 
     private static final String PLUGIN_PREFIX = "§3§l[§b§lBBChat§3§l] ";
-    private TextComponent pluginPrefixComponent;
+    private final TextComponent pluginPrefixComponent;
+    private final String pluginVersion;
 
     public PluginMessenger(BareBonesChat plugin) {
         TextComponent prefixComponent = new TextComponent(PLUGIN_PREFIX);
         prefixComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColor.AQUA + "§l" + "BareBonesChat " + ChatColor.GRAY + "(v" + plugin.getDescription().getVersion() + ")" + "§r\n" + "A lightweight chat plugin.")));
         prefixComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/DashTheDev/BareBonesChat"));
         pluginPrefixComponent = prefixComponent;
+        pluginVersion = plugin.getDescription().getVersion();
     }
 
     public TextComponent getPluginPrefixComponent() {
         return pluginPrefixComponent;
+    }
+
+    public String getPluginVersion() {
+        return pluginVersion;
     }
 
     public void sendSuccess(Player player, String message) {

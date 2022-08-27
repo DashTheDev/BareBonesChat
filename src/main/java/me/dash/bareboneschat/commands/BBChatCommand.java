@@ -41,7 +41,7 @@ public class BBChatCommand implements BareBonesChatCommand, CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
             if (args.length == 0) {
-                pluginMessenger.sendError(player, "Please specify a subcommand.");
+                pluginMessenger.sendSuccess(player, "Running v" + pluginMessenger.getPluginVersion() + ".\nType /bbchat help for commands.");
                 return true;
             }
 
