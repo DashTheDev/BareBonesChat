@@ -1,7 +1,7 @@
 package me.dash.bareboneschat;
 
 import me.dash.bareboneschat.config.ConfigManager;
-import me.dash.bareboneschat.data.DataManager;
+import me.dash.bareboneschat.data.PlayerDataManager;
 import me.dash.bareboneschat.registry.CommandRegistry;
 import me.dash.bareboneschat.registry.ListenerRegistry;
 import me.dash.bareboneschat.registry.VaultRegistry;
@@ -12,7 +12,7 @@ public final class BareBonesChat extends JavaPlugin {
 
     private PluginMessenger messenger;
     private ConfigManager configManager;
-    private DataManager dataManager;
+    private PlayerDataManager playerDataManager;
     private Permission permissionProvider;
 
     public PluginMessenger getMessenger() {
@@ -23,8 +23,8 @@ public final class BareBonesChat extends JavaPlugin {
         return configManager;
     }
 
-    public DataManager getDataManager() {
-        return dataManager;
+    public PlayerDataManager getPlayerDataManager() {
+        return playerDataManager;
     }
 
     public Permission getPermissionProvider() {
@@ -37,7 +37,7 @@ public final class BareBonesChat extends JavaPlugin {
 
         messenger = new PluginMessenger(this);
         configManager = new ConfigManager(this);
-        dataManager = new DataManager();
+        playerDataManager = new PlayerDataManager(this);
 
         permissionProvider = VaultRegistry.registerPermissionsProvider(this);
         ListenerRegistry.registerListeners(this);
@@ -46,5 +46,6 @@ public final class BareBonesChat extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        playerDataManager.saveAllPlayerDataToYml();
     }
 }

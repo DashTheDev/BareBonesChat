@@ -2,7 +2,7 @@ package me.dash.bareboneschat.commands;
 
 import me.dash.bareboneschat.BareBonesChat;
 import me.dash.bareboneschat.PluginMessenger;
-import me.dash.bareboneschat.data.DataManager;
+import me.dash.bareboneschat.data.PlayerDataManager;
 import me.dash.bareboneschat.events.PrivateMessageEvent;
 import me.dash.bareboneschat.helpers.MessageHelper;
 import org.bukkit.Bukkit;
@@ -15,11 +15,11 @@ import java.util.UUID;
 
 public class ReplyCommand implements BareBonesChatCommand, CommandExecutor {
 
-    private final DataManager dataManager;
+    private final PlayerDataManager playerDataManager;
     private final PluginMessenger pluginMessenger;
 
     public ReplyCommand(BareBonesChat plugin) {
-        dataManager = plugin.getDataManager();
+        playerDataManager = plugin.getPlayerDataManager();
         pluginMessenger = plugin.getMessenger();
     }
 
@@ -46,7 +46,7 @@ public class ReplyCommand implements BareBonesChatCommand, CommandExecutor {
                 return true;
             }
 
-            UUID recipientPlayerUUID = dataManager.getRecipientSenderMap().get(senderPlayer.getUniqueId());
+            UUID recipientPlayerUUID = playerDataManager.getPlayerData(senderPlayer.getUniqueId()).getLastMessagePlayerUUID();
 
             if (recipientPlayerUUID == null) {
                 pluginMessenger.sendError(senderPlayer, "You have not been messaged.");

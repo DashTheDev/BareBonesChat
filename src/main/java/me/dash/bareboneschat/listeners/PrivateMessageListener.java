@@ -3,7 +3,8 @@ package me.dash.bareboneschat.listeners;
 import me.dash.bareboneschat.BareBonesChat;
 import me.dash.bareboneschat.config.MessageSpySection;
 import me.dash.bareboneschat.config.PrivateMessagesSection;
-import me.dash.bareboneschat.data.DataManager;
+import me.dash.bareboneschat.data.PlayerData;
+import me.dash.bareboneschat.data.PlayerDataManager;
 import me.dash.bareboneschat.events.PrivateMessageEvent;
 import me.dash.bareboneschat.events.SpyMessageEvent;
 import me.dash.bareboneschat.helpers.MessageHelper;
@@ -16,12 +17,12 @@ public class PrivateMessageListener implements Listener {
 
     private final PrivateMessagesSection privateMessagesConfigSection;
     private final MessageSpySection messageSpyConfigSection;
-    private final DataManager dataManager;
+    private final PlayerDataManager playerDataManager;
 
     public PrivateMessageListener(BareBonesChat plugin) {
         privateMessagesConfigSection = plugin.getConfigManager().getPrivateMessagesSection();
         messageSpyConfigSection = plugin.getConfigManager().getMessageSpySection();
-        dataManager = plugin.getDataManager();
+        playerDataManager = plugin.getPlayerDataManager();
     }
 
 
@@ -31,6 +32,7 @@ public class PrivateMessageListener implements Listener {
     public void onPrivateMessage(PrivateMessageEvent event) {
         Player senderPlayer = event.getSenderPlayer();
         Player recipientPlayer = event.getRecipientPlayer();
+        PlayerData recipientPlayerData = playerDataManager.getPlayerData(recipientPlayer.getUniqueId());
         String message = event.getMessage();
 
         String senderMessage = MessageHelper.replaceMessagePlaceholders(
@@ -46,7 +48,7 @@ public class PrivateMessageListener implements Listener {
         senderPlayer.sendMessage(senderMessage);
         recipientPlayer.sendMessage(recipientMessage);
 
-        dataManager.getRecipientSenderMap().put(recipientPlayer.getUniqueId(), senderPlayer.getUniqueId());
+        recipientPlayerData.setLastMessagePlayerUUID(senderPlayer.getUniqueId());
 
         if (messageSpyConfigSection.isEnabled()) {
             SpyMessageEvent spyMessageEvent = new SpyMessageEvent(senderPlayer.getDisplayName(), recipientPlayer.getDisplayName(), message);

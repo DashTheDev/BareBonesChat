@@ -1,28 +1,21 @@
 package me.dash.bareboneschat.listeners;
 
 import me.dash.bareboneschat.BareBonesChat;
-import me.dash.bareboneschat.data.DataManager;
-import org.bukkit.entity.Player;
+import me.dash.bareboneschat.data.PlayerDataManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class QuitListener implements Listener {
 
-    private final DataManager dataManager;
+    private final PlayerDataManager playerDataManager;
 
     public QuitListener(BareBonesChat plugin) {
-        dataManager = plugin.getDataManager();
+        playerDataManager = plugin.getPlayerDataManager();
     }
-
-
-
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-
-        dataManager.getRecipientSenderMap().remove(player.getUniqueId());
-        dataManager.getMessageSpyPlayers().remove(player.getUniqueId());
+        playerDataManager.setPlayerData(event.getPlayer().getUniqueId(), null);
     }
 }

@@ -2,7 +2,8 @@ package me.dash.bareboneschat.commands;
 
 import me.dash.bareboneschat.BareBonesChat;
 import me.dash.bareboneschat.PluginMessenger;
-import me.dash.bareboneschat.data.DataManager;
+import me.dash.bareboneschat.data.PlayerData;
+import me.dash.bareboneschat.data.PlayerDataManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,11 +11,11 @@ import org.bukkit.entity.Player;
 
 public class MessageSpyCommand implements BareBonesChatCommand, CommandExecutor {
 
-    private final DataManager dataManager;
+    private final PlayerDataManager playerDataManager;
     private final PluginMessenger pluginMessenger;
 
     public MessageSpyCommand(BareBonesChat plugin) {
-        dataManager = plugin.getDataManager();
+        playerDataManager = plugin.getPlayerDataManager();
         pluginMessenger = plugin.getMessenger();
     }
 
@@ -36,21 +37,13 @@ public class MessageSpyCommand implements BareBonesChatCommand, CommandExecutor 
                 return true;
             }
 
-            Boolean isActive = dataManager.getMessageSpyPlayers().get(player.getUniqueId());
+            PlayerData playerData = playerDataManager.getPlayerData(player.getUniqueId());
+            playerData.toggleMessageSpyEnabled();
 
-            if (isActive == null) {
-                dataManager.getMessageSpyPlayers().put(player.getUniqueId(), true);
+            if (playerData.getMessageSpyEnabled()) {
                 pluginMessenger.sendSuccess(player, "Message Spy enabled.");
-            }
-            else {
-                dataManager.getMessageSpyPlayers().put(player.getUniqueId(), !isActive);
-
-                if (!isActive) {
-                    pluginMessenger.sendSuccess(player, "Message Spy enabled.");
-                }
-                else {
-                    pluginMessenger.sendError(player, "Message Spy disabled.");
-                }
+            } else {
+                pluginMessenger.sendError(player, "Message Spy disabled.");
             }
         }
 
